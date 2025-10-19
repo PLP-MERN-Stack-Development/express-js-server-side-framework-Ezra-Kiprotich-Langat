@@ -1,62 +1,171 @@
-# Express.js RESTful API Assignment
+1️⃣ GET /
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+Description: Returns a simple “Hello World” message.
+Example Request:
 
-## Assignment Overview
+GET /
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
 
-## Getting Started
+Response:
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
+"Hello World"
 
-## Files Included
+2️⃣ GET /api/products
 
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
+Description: Get all products with optional filtering, pagination, and search.
 
-## Requirements
+Query Parameters:
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Postman, Insomnia, or curl for API testing
+Name	Type	Description
+category	string	Filter by category
+page	number	Page number (default: 1)
+limit	number	Results per page (default: 5)
+search	string	Search by product name
 
-## API Endpoints
+Example Request:
 
-The API will have the following endpoints:
+GET /api/products?category=electronics&page=1&limit=2&search=phone
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
 
-## Submission
+Response:
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+{
+  "total": 3,
+  "page": 1,
+  "limit": 2,
+  "data": [
+    {
+      "id": "1",
+      "name": "Laptop",
+      "description": "High-performance laptop with 16GB RAM",
+      "price": 1200,
+      "category": "electronics",
+      "inStock": true
+    }
+  ]
+}
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+3️⃣ GET /api/products/:id
 
-## Resources
+Description: Retrieve a product by its ID.
+Example Request:
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+GET /api/products/1
+
+
+Response:
+
+{
+  "id": "1",
+  "name": "Laptop",
+  "description": "High-performance laptop with 16GB RAM",
+  "price": 1200,
+  "category": "electronics",
+  "inStock": true
+}
+
+
+Error (not found):
+
+{ "error": "Product not found" }
+
+4️⃣ POST /api/products
+
+Description: Create a new product.
+Authentication: Requires header x-api-key with correct value.
+
+Headers:
+
+x-api-key: mysecretkey
+Content-Type: application/json
+
+
+Request Body:
+
+{
+  "name": "Tablet",
+  "description": "Android tablet with 10-inch display",
+  "price": 300,
+  "category": "electronics",
+  "inStock": true
+}
+
+
+Response:
+
+{
+  "id": "generated-uuid",
+  "name": "Tablet",
+  "description": "Android tablet with 10-inch display",
+  "price": 300,
+  "category": "electronics",
+  "inStock": true
+}
+
+
+Validation Errors:
+
+{ "error": "All product fields are required." }
+
+
+Authentication Errors:
+
+{ "error": "Unauthorized. Invalid or missing API key." }
+
+5️⃣ PUT /api/products/:id
+
+Description: Update an existing product.
+Authentication: Requires x-api-key header.
+
+Example Request:
+
+PUT /api/products/1
+
+
+Request Body:
+
+{
+  "name": "Laptop Pro",
+  "description": "Updated 32GB RAM laptop",
+  "price": 1500,
+  "category": "electronics",
+  "inStock": true
+}
+
+
+Response:
+
+{
+  "id": "1",
+  "name": "Laptop Pro",
+  "description": "Updated 32GB RAM laptop",
+  "price": 1500,
+  "category": "electronics",
+  "inStock": true
+}
+
+6️⃣ DELETE /api/products/:id
+
+Description: Delete a product by ID.
+Authentication: Requires x-api-key.
+
+Example Request:
+
+DELETE /api/products/2
+
+
+Response:
+
+{
+  "message": "Product deleted",
+  "deleted": [
+    {
+      "id": "2",
+      "name": "Smartphone",
+      "description": "Latest model with 128GB storage",
+      "price": 800,
+      "category": "electronics",
+      "inStock": true
+    }
+  ]
+} 
